@@ -14,6 +14,11 @@ const io = new Server(serverHttp, {
 
 app.use(cors());
 
+io.on("connect", (socket) => {
+  console.log("New user connected!");
+  console.log(socket);
+});
+
 const serverPort = EnvVariables.getServerPort();
 
 app.listen(serverPort, () =>
