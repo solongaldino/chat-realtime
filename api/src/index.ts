@@ -1,12 +1,13 @@
 import express from "express";
-import http from "http";
+import { createServer } from "http";
 import { Server } from "socket.io";
 import cors from "cors";
-import { EnvVariables } from "./utils";
+import { EnvVariables, Rethinkdb } from "./utils";
+import mainEvent from "./events";
 
 const app = express();
 
-const serverHttp = http.createServer(app);
+const serverHttp = createServer(app);
 
 const io = new Server(serverHttp, {
   cors: { origin: EnvVariables.getUrlAppFrontEnd() },
@@ -14,13 +15,12 @@ const io = new Server(serverHttp, {
 
 app.use(cors());
 
-io.on("connect", (socket) => {
-  console.log("New user connected!");
-  console.log(socket);
-});
+Rethinkdb.init();
+
+mainEvent(io);
 
 const serverPort = EnvVariables.getServerPort();
 
-app.listen(serverPort, () =>
+serverHttp.listen(3333, () =>
   console.log(`Server is running on PORT ${serverPort}`)
 );

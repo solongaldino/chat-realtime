@@ -1,0 +1,11 @@
+version: "3.9"
+
+services:
+  rethinkdb:
+    container_name: rethink-database
+    image: rethinkdb:2.4
+    volumes:
+      - "./volumes/rethinkdb/data:/data"
+    # Rethink dashboard
+    ports:
+      - 8081:8080
