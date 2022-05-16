@@ -3,14 +3,20 @@ import { Message } from "../types";
 import { Rethinkdb } from "../utils";
 
 class MessageRepository {
-  private table: RTable;
+  private table: RTable<Message>;
 
   constructor() {
     this.table = Rethinkdb.selectTable("Messages");
   }
 
-  async changes(): Promise<Message[]> {
-    return await this.table.run();
+  async changes() {
+    return await this.table.changes().run(await Rethinkdb.getConnection());
+  }
+
+  async getAll() {
+    return await this.table
+      .orderBy("created_at")
+      .run(await Rethinkdb.getConnection());
   }
 
   async create(message: Message) {

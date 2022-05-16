@@ -1,4 +1,5 @@
 import { IMessage } from "../App";
+import "./Messages.css";
 
 interface IProps {
   messages: IMessage[];
@@ -7,9 +8,9 @@ interface IProps {
 const Messages = ({ messages }: IProps) => {
   return (
     <div className="messages-container">
-      {messages.map((item) => (
-        <p>
-          <strong>{item.userName}:</strong>
+      {messages.map((item, index) => (
+        <p key={index}>
+          <strong>{item.user.userName}: </strong>
           {item.message}
         </p>
       ))}
